@@ -1,6 +1,6 @@
-import { User } from '../user';
-import { Comment } from '../comment/comment';
-import { Reaction } from '../reactions/reaction';
+import { User } from "../user";
+import { Comment } from "../comment/comment";
+import { Reaction } from "../reactions/reaction";
 
 export interface Post {
     id: number;

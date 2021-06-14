@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpInternalService } from './http-internal.service';
-import { Post } from '../models/post/post';
-import { NewReaction } from '../models/reactions/newReaction';
-import { NewPost } from '../models/post/new-post';
+import { Injectable } from "@angular/core";
+import { HttpInternalService } from "./http-internal.service";
+import { Post } from "../models/post/post";
+import { NewReaction } from "../models/reactions/newReaction";
+import { NewPost } from "../models/post/new-post";
+import { UpdatePost } from "../models/post/update-post";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class PostService {
-    public routePrefix = '/api/posts';
+    public routePrefix = "/api/posts";
 
     constructor(private httpService: HttpInternalService) {}
 
@@ -15,10 +16,26 @@ export class PostService {
     }
 
     public createPost(post: NewPost) {
-        return this.httpService.postFullRequest<Post>(`${this.routePrefix}`, post);
+        return this.httpService.postFullRequest<Post>(
+            `${this.routePrefix}`,
+            post
+        );
     }
 
     public likePost(reaction: NewReaction) {
-        return this.httpService.postFullRequest<Post>(`${this.routePrefix}/like`, reaction);
+        return this.httpService.postFullRequest<Post>(
+            `${this.routePrefix}/like`,
+            reaction
+        );
+    }
+    public deletePost(id: number) {
+        return this.httpService.deleteFullRequest(`${this.routePrefix}/` + id);
+    }
+
+    public updatePost(updatedPost: UpdatePost) {
+        return this.httpService.putFullRequest(
+            `${this.routePrefix}`,
+            updatedPost
+        );
     }
 }
