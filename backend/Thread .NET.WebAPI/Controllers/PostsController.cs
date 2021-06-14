@@ -29,22 +29,42 @@ namespace Thread_.NET.WebAPI.Controllers
         {
             return Ok(await _postService.GetAllPosts());
         }
-
         [HttpPost]
         public async Task<ActionResult<PostDTO>> CreatePost([FromBody] PostCreateDTO dto)
         {
             dto.AuthorId = this.GetUserIdFromToken();
-
             return Ok(await _postService.CreatePost(dto));
         }
 
         [HttpPost("like")]
         public async Task<IActionResult> LikePost(NewReactionDTO reaction)
         {
-            reaction.UserId = this.GetUserIdFromToken();
+            try
+            {
+                reaction.UserId = this.GetUserIdFromToken();
 
-            await _likeService.LikePost(reaction);
+                await _likeService.LikePost(reaction);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException) { return BadRequest("Sql exception"); }
+            catch (BLL.Exceptions.InvalidTokenException) { return BadRequest("Token exception"); }
+            catch (System.Exception ex) { return BadRequest(ex.Message); }
+
             return Ok();
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdatePost([FromBody] PostUpdateDTO postUpdate)
+        {
+
+            await _postService.UpdatePost(postUpdate.Id, postUpdate.NewBody, postUpdate.UpdatedAt);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            await _postService.DeletePost(id);
+            return NoContent();
         }
     }
 }

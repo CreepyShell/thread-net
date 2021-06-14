@@ -34,12 +34,13 @@
       <button mat-raised-button matTooltip="Write a post" (click)="toggleNewPostContainer()">
         <mat-icon color="accent">add_comment</mat-icon>
       </button>
+      <mat-checkbox class="example-margin" [(ngModel)]="showPostsILikes" (change)="IsChecked($event.checked)">Show posts i liked</mat-checkbox>
       <mat-slide-toggle (change)="sliderChanged($event)">Only mine</mat-slide-toggle>
     </div>
     <mat-toolbar *ngIf="posts.length === 0 && !loadingPosts">
       <p class="no-content">There is nothing</p>
     </mat-toolbar>
-    <div *ngFor="let _post of posts" class="user-post">
+    <div *ngFor="let _post of getNotDeletedPosts()" class="user-post">
       <app-post [post]="_post" [currentUser]="currentUser"></app-post>
     </div>
   </div>

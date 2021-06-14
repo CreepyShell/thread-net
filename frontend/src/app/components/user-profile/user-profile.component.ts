@@ -1,17 +1,17 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { User } from '../../models/user';
-import { Location } from '@angular/common';
-import { Subject } from 'rxjs';
-import { UserService } from '../../services/user.service';
-import { AuthenticationService } from '../../services/auth.service';
-import { ImgurService } from '../../services/imgur.service';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { SnackBarService } from '../../services/snack-bar.service';
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { User } from "../../models/user";
+import { Location } from "@angular/common";
+import { Subject } from "rxjs";
+import { UserService } from "../../services/user.service";
+import { AuthenticationService } from "../../services/auth.service";
+import { GyazoService } from "src/app/services/gyazo.service";
+import { switchMap, takeUntil } from "rxjs/operators";
+import { SnackBarService } from "../../services/snack-bar.service";
 
 @Component({
-    selector: 'app-user-profile',
-    templateUrl: './user-profile.component.html',
-    styleUrls: ['./user-profile.component.sass']
+    selector: "app-user-profile",
+    templateUrl: "./user-profile.component.html",
+    styleUrls: ["./user-profile.component.sass"],
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
     public user = {} as User;
@@ -25,14 +25,17 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private snackBarService: SnackBarService,
         private authService: AuthenticationService,
-        private imgurService: ImgurService
+        private gyazoService: GyazoService
     ) {}
 
     public ngOnInit() {
         this.authService
             .getUser()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((user) => (this.user = this.userService.copyUser(user)), (error) => this.snackBarService.showErrorMessage(error));
+            .subscribe(
+                (user) => (this.user = this.userService.copyUser(user)),
+                (error) => this.snackBarService.showErrorMessage(error)
+            );
     }
 
     public ngOnDestroy() {
@@ -43,9 +46,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     public saveNewInfo() {
         const userSubscription = !this.imageFile
             ? this.userService.updateUser(this.user)
-            : this.imgurService.uploadToImgur(this.imageFile, 'title').pipe(
+            : this.gyazoService.uploadImage(this.imageFile).pipe(
                   switchMap((imageData) => {
-                      this.user.avatar = imageData.body.data.link;
+                      this.user.avatar = imageData.url;
                       return this.userService.updateUser(this.user);
                   })
               );
@@ -55,7 +58,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
             () => {
                 this.authService.setUser(this.user);
-                this.snackBarService.showUsualMessage('Successfully updated');
+                this.snackBarService.showUsualMessage("Successfully updated");
                 this.loading = false;
             },
             (error) => this.snackBarService.showErrorMessage(error)
@@ -66,18 +69,23 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.imageFile = target.files[0];
 
         if (!this.imageFile) {
-            target.value = '';
+            target.value = "";
             return;
         }
 
         if (this.imageFile.size / 1000000 > 5) {
-            this.snackBarService.showErrorMessage(`Image can't be heavier than ~5MB`);
-            target.value = '';
+            this.snackBarService.showErrorMessage(
+                `Image can't be heavier than ~5MB`
+            );
+            target.value = "";
             return;
         }
 
         const reader = new FileReader();
-        reader.addEventListener('load', () => (this.user.avatar = reader.result as string));
+        reader.addEventListener(
+            "load",
+            () => (this.user.avatar = reader.result as string)
+        );
         reader.readAsDataURL(this.imageFile);
     }
 

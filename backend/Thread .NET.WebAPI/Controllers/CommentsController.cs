@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Thread_.NET.BLL.Services;
 using Thread_.NET.Common.DTO.Comment;
+using Thread_.NET.Common.DTO.Like;
 using Thread_.NET.Extensions;
 
 namespace Thread_.NET.WebAPI.Controllers
@@ -24,6 +25,31 @@ namespace Thread_.NET.WebAPI.Controllers
         {
             comment.AuthorId = this.GetUserIdFromToken();
             return Ok(await _commentService.CreateComment(comment));
+        }
+
+        [HttpPost("reaction")]
+        public async Task<IActionResult> CommentReaction(NewReactionDTO reactionDTO)
+        {
+            reactionDTO.UserId = this.GetUserIdFromToken();
+
+            await _commentService.CommentReaction(reactionDTO);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCommnet([FromBody] CreateCommentDTO createComment)
+        {
+            await _commentService.UpdateComment(createComment);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            await _commentService.DeleteComment(id);
+
+            return NoContent();
         }
     }
 }

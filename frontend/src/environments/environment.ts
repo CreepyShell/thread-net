@@ -4,8 +4,9 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'https://localhost:44344',
-    imgurClientId: ''
+    apiUrl: "https://localhost:5001",
+    gyazoAccessToken:
+        "c33ac5ca34cb37cad437550a3464b74dd9f6dc8756a96dd7e3e0e92856256f6c",
 };
 
 /*

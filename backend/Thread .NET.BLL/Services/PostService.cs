@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,6 +54,39 @@ namespace Thread_.NET.BLL.Services
             return _mapper.Map<ICollection<PostDTO>>(posts);
         }
 
+        public async Task UpdatePost(int id, string newBody, DateTime updateTime)
+        {
+            Post updatedPost = _context.Posts.First(post => post.Id == id);
+
+            updatedPost.Body = newBody;
+            updatedPost.UpdatedAt = updateTime;
+
+            _context.Posts.Update(updatedPost);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePost(int id)
+        { 
+           await _context.Database.ExecuteSqlRawAsync($"Delete FROM [dbo].CommentReactions \n" +
+                $"Where CommentId = (" +
+                $"SELECT CommentId " +
+                $"From[dbo].Comments " +
+                $"WHERE PostId = {id})\n" +
+
+                "Delete FROM[dbo].Comments\n" +
+                $"Where PostId = {id}\n" +
+
+                "Delete FROM[dbo].PostReactions\n" +
+                $"Where PostId = {id}\n" +
+
+                "DELETE FROM[dbo].[Posts]\n" +
+                $"WHERE Id = {id}\n");
+
+            await _context.SaveChangesAsync();
+
+
+        }
         public async Task<PostDTO> CreatePost(PostCreateDTO postDto)
         {
             var postEntity = _mapper.Map<Post>(postDto);
