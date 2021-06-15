@@ -48,6 +48,32 @@ namespace Thread_.NET.BLL.Services
             };
         }
 
+        public async Task<string> SendMailToResetPass(UserLoginDTO userReset)
+        {
+            User user = _context.Users.First(user => user.Email == userReset.Email);
+
+            if (user == null)
+                return "NotFound";
+
+            string resetHash = SecurityHelper.GetResetPassHash(user.Email, user.Salt);
+
+            try
+            {
+                MailService service = new MailService();
+                await service.SendMailAsync(user.Email, $"http://localhost:4200/resetpass/{resetHash}");
+            }
+            catch (MailKit.Net.Smtp.SmtpCommandException)
+            {
+                return "NotExitingMail";
+            }
+            catch (System.Exception)
+            {
+                return "";
+            }
+            return resetHash;
+
+        }
+
         public async Task<AccessTokenDTO> GenerateAccessToken(int userId, string userName, string email)
         {
             var refreshToken = _jwtFactory.GenerateRefreshToken();

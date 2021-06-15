@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Thread_.NET.Common.Security
 {
@@ -31,6 +32,15 @@ namespace Thread_.NET.Common.Security
         public static bool ValidatePassword(string password, string hash, string salt)
         {
             return HashPassword(password, Convert.FromBase64String(salt)) == hash;
+        }
+
+        public static string GetResetPassHash(string email, string salt)
+        {
+            string sourceData = email + salt;
+            byte[] source, hash;
+            source = Encoding.ASCII.GetBytes(sourceData);
+            hash = new HMACMD5(source).Hash;
+            return Convert.ToBase64String(hash);
         }
     }
 }

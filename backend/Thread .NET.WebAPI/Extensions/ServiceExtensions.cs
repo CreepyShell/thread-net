@@ -33,6 +33,7 @@ namespace Thread_.NET.Extensions
             services.AddScoped<PostService>();
             services.AddScoped<UserService>();
             services.AddScoped<CommentService>();
+            services.AddScoped<MailService>();
 
             services.AddScoped<PostHub>();
         }
