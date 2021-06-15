@@ -24,17 +24,18 @@ namespace Thread_.NET.WebAPI.Controllers
             return Ok(await _authService.Authorize(dto));
         }
 
+        
 
         [HttpPost("reset")]
-        public async Task<ActionResult<string>> SendMailToResetPass([FromBody] UserLoginDTO userReset)
+        public async Task<IActionResult> SendMailToResetPass([FromBody] UserLoginDTO userReset)
         {
-            string hashPass = await _authService.SendMailToResetPass(userReset);
+            string rezult = await _authService.SendMailToResetPass(userReset);
 
-            if (hashPass == "NotFound")
+            if (rezult == "NotFound")
                 return NotFound("Not found user with this email");
-            if (hashPass == "NotExitingMail" || string.IsNullOrEmpty(hashPass))
-                return BadRequest("Email not rigth so can not reset pass");
-            return Ok(hashPass);
+            if (rezult == "NotExitingMail" || string.IsNullOrEmpty(rezult))
+                return BadRequest(rezult);
+            return Ok("Sended");
 
            
         }

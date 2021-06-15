@@ -86,6 +86,7 @@ export class PostComponent implements OnDestroy {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(() => (this.post.id = -1));
     }
+
     public toggleComments() {
         if (!this.currentUser) {
             this.catchErrorWrapper(this.authService.getUser())

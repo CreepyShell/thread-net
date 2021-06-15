@@ -71,8 +71,8 @@ export class AuthenticationService {
         );
     }
 
-    public sendMailToResetPass(user: User) {
-        return this.httpService.postFullRequest<string>(
+    public sendMailToResetPass(user: UserLoginDto) {
+        return this.httpService.postFullRequest(
             `${this.routePrefix}/auth/reset`,
             user
         );

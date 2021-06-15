@@ -34,12 +34,14 @@ namespace Thread_.NET.Common.Security
             return HashPassword(password, Convert.FromBase64String(salt)) == hash;
         }
 
+
+
         public static string GetResetPassHash(string email, string salt)
         {
-            string sourceData = email + salt;
+            string sourceData = email + salt + DateTime.Now.ToString();
             byte[] source, hash;
             source = Encoding.ASCII.GetBytes(sourceData);
-            hash = new HMACMD5(source).Hash;
+            hash = new MD5CryptoServiceProvider().ComputeHash(source);
             return Convert.ToBase64String(hash);
         }
     }

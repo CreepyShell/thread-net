@@ -51,19 +51,17 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
     public sendMail() {
         if (this.validateEmail(this.email)) {
+            alert("returned true");
             this.authService
                 .sendMailToResetPass({
                     email: this.email,
-                    userName: "null",
-                    id: -1,
-                    avatar: "null",
+                    password: "null",
                 })
                 .pipe(takeUntil(this.unsubscribe$))
-                .subscribe(() => {
-                    this.snackBarService.showUsualMessage("Email sent");
-                    this.dialogRef.close();
-                    return;
-                });
+                .subscribe(() => {});
+            this.snackBarService.showUsualMessage("Email sent");
+            this.dialogRef.close();
+            return;
         }
         this.snackBarService.showErrorMessage("This email is not right");
     }
@@ -94,9 +92,6 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
     }
 
     public validateEmail(mail: string): boolean {
-        if (mail === "email") {
-            return false;
-        }
         return true;
     }
 }
