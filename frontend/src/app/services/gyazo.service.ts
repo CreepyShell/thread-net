@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Injectable } from "@angular/core";
 import { HttpInternalService } from "./http-internal.service";
 import { environment } from "src/environments/environment";
@@ -20,28 +19,8 @@ export class GyazoService {
 
     public deleteImage(imageId: string) {
         return this.httpService.deleteRequest(
-            this.buildUrl(`https://api.gyazo.com/api/images/:${imageId}`)
+            this.buildUrl(`https://api.gyazo.com/api/images/${imageId}`)
         );
-=======
-import { Injectable } from '@angular/core';
-import { HttpInternalService } from './http-internal.service';
-import { environment } from 'src/environments/environment';
-import { GyazoUpload } from '../models/gyazo';
-
-@Injectable({ providedIn: 'root' })
-export class GyazoService {
-    constructor(private httpService: HttpInternalService) { }
-
-    public uploadImage(image: Blob) {
-        const data = new FormData();
-        data.append('imagedata', image);
-
-        return this.httpService.postRequest<GyazoUpload>(this.buildUrl('https://upload.gyazo.com/api/upload'), data);
-    }
-
-    public deleteImage(imageId: string) {
-        return this.httpService.deleteRequest(this.buildUrl(`https://api.gyazo.com/api/images/${imageId}`));
->>>>>>> 14c153aababa197c743455c8d428c487418b1094
     }
 
     private buildUrl(url: string) {

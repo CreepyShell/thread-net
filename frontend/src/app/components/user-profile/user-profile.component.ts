@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { User } from "../../models/user";
 import { Location } from "@angular/common";
@@ -8,17 +7,6 @@ import { AuthenticationService } from "../../services/auth.service";
 import { GyazoService } from "src/app/services/gyazo.service";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { SnackBarService } from "../../services/snack-bar.service";
-=======
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from '../../models/user';
-import { Location } from '@angular/common';
-import { Subject } from 'rxjs';
-import { UserService } from '../../services/user.service';
-import { AuthenticationService } from '../../services/auth.service';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { SnackBarService } from '../../services/snack-bar.service';
-import { GyazoService } from 'src/app/services/gyazo.service';
->>>>>>> 14c153aababa197c743455c8d428c487418b1094
 
 @Component({
     selector: "app-user-profile",
@@ -38,11 +26,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         private snackBarService: SnackBarService,
         private authService: AuthenticationService,
         private gyazoService: GyazoService
-<<<<<<< HEAD
     ) {}
-=======
-    ) { }
->>>>>>> 14c153aababa197c743455c8d428c487418b1094
 
     public ngOnInit() {
         this.authService
@@ -63,19 +47,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         const userSubscription = !this.imageFile
             ? this.userService.updateUser(this.user)
             : this.gyazoService.uploadImage(this.imageFile).pipe(
-<<<<<<< HEAD
                   switchMap((imageData) => {
                       this.user.avatar = imageData.url;
                       return this.userService.updateUser(this.user);
                   })
               );
-=======
-                switchMap((imageData) => {
-                    this.user.avatar = imageData.url;
-                    return this.userService.updateUser(this.user);
-                })
-            );
->>>>>>> 14c153aababa197c743455c8d428c487418b1094
 
         this.loading = true;
 

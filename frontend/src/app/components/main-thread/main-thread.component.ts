@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Post } from "../../models/post/post";
 import { User } from "../../models/user";
@@ -15,24 +14,6 @@ import { switchMap, takeUntil } from "rxjs/operators";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { SnackBarService } from "../../services/snack-bar.service";
 import { environment } from "src/environments/environment";
-=======
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Post } from '../../models/post/post';
-import { User } from '../../models/user';
-import { Subject } from 'rxjs';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { AuthenticationService } from '../../services/auth.service';
-import { PostService } from '../../services/post.service';
-import { AuthDialogService } from '../../services/auth-dialog.service';
-import { DialogType } from '../../models/common/auth-dialog-type';
-import { EventService } from '../../services/event.service';
-import { NewPost } from '../../models/post/new-post';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { SnackBarService } from '../../services/snack-bar.service';
-import { environment } from 'src/environments/environment';
-import { GyazoService } from 'src/app/services/gyazo.service';
->>>>>>> 14c153aababa197c743455c8d428c487418b1094
 
 @Component({
     selector: "app-main-thread",
@@ -109,19 +90,11 @@ export class MainThreadComponent implements OnInit, OnDestroy {
         const postSubscription = !this.imageFile
             ? this.postService.createPost(this.post)
             : this.gyazoService.uploadImage(this.imageFile).pipe(
-<<<<<<< HEAD
                   switchMap((imageData) => {
                       this.post.previewImage = imageData.url;
                       return this.postService.createPost(this.post);
                   })
               );
-=======
-                switchMap((imageData) => {
-                    this.post.previewImage = imageData.url;
-                    return this.postService.createPost(this.post);
-                })
-            );
->>>>>>> 14c153aababa197c743455c8d428c487418b1094
 
         this.loading = true;
 
