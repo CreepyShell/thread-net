@@ -16,6 +16,7 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
 import { AuthDialogComponent } from "./components/auth-dialog/auth-dialog.component";
 import { CommentComponent } from "./components/comment/comment.component";
 import { MaterialComponentsModule } from "./components/common/material-components.module";
+import { ResetPassword } from "./components/reset-password/reset-password.component";
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { MaterialComponentsModule } from "./components/common/material-component
         UserProfileComponent,
         AuthDialogComponent,
         CommentComponent,
+        ResetPassword,
     ],
     imports: [
         BrowserModule,

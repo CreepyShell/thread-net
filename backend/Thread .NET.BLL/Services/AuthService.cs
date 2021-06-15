@@ -48,6 +48,34 @@ namespace Thread_.NET.BLL.Services
             };
         }
 
+        public async Task<string> SendMailToResetPass( UserLoginDTO userReset)
+        {
+            User user = _context.Users.First(user => user.Email == userReset.Email);
+
+            if (user == null)
+                return "NotFound";
+
+            string resetHash = SecurityHelper.GetResetPassHash(user.Email, user.Salt);
+
+            try
+            {
+                MailService service = new MailService();
+                await service.SendMailAsync(user.Email,
+                    $"To reset password in .NetThread application follow the link: http://localhost:4200/resetPassword/{resetHash}",
+                    "Reset password in .NetThread application");
+            }
+            catch (MailKit.Net.Smtp.SmtpCommandException ex)
+            {
+                return ex.Message;
+            }
+            catch (System.Exception)
+            {
+                return "";
+            }
+            return "ok";
+
+        }
+
         public async Task<AccessTokenDTO> GenerateAccessToken(int userId, string userName, string email)
         {
             var refreshToken = _jwtFactory.GenerateRefreshToken();

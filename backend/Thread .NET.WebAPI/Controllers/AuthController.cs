@@ -23,5 +23,21 @@ namespace Thread_.NET.WebAPI.Controllers
         {
             return Ok(await _authService.Authorize(dto));
         }
+
+        
+
+        [HttpPost("reset")]
+        public async Task<IActionResult> SendMailToResetPass([FromBody] UserLoginDTO userReset)
+        {
+            string rezult = await _authService.SendMailToResetPass(userReset);
+
+            if (rezult == "NotFound")
+                return NotFound("Not found user with this email");
+            if (rezult == "NotExitingMail" || string.IsNullOrEmpty(rezult))
+                return BadRequest(rezult);
+            return Ok("Sended");
+
+           
+        }
     }
 }
